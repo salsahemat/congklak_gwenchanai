@@ -3,87 +3,87 @@ from tkinter import messagebox
 from congklak_logic import Congklak
 
 class CongklakGUI:
-     # Inisialisasi GUI untuk permainan Congklak
     def __init__(self, master):
-        # Inisialisasi kelas CongklakGUI
         self.master = master
         self.master.title("Congklak Game")
 
-        # Load foto untuk biji dan tempat 
         self.hole_image = tk.PhotoImage(file="asset/biji.png")
-        self.hole_image = self.hole_image.subsample(7)  # Ubah faktor subsample menjadi 7 agar lebih bisa dilihat
+        self.hole_image = self.hole_image.subsample(7)
 
         self.store_image = tk.PhotoImage(file="asset/tempat1.png")
-        self.store_image = self.store_image.subsample(7)  # Ubah faktor subsample menjadi 7 agar lebih bisa dilihat
+        self.store_image = self.store_image.subsample(7)
 
         self.game = Congklak()
 
-        # Membuat tombol-tombol untuk lubang-lubang pemain
         self.buttons = []
-        for i in range(6):
-            button = tk.Button(self.master, image=self.hole_image, command=lambda i=i: self.make_player_move(i))
-            button.grid(row=0, column=i)
+        self.button_labels = []
+        for i in range(14):
+            row = 0 if i < 7 else 2
+            col = i if i < 7 else 13 - i
+            button_frame = tk.Frame(self.master)
+            button_frame.grid(row=row+1, column=col)
+
+            button = tk.Button(button_frame, image=self.hole_image, command=lambda i=i: self.make_player_move(i))
+            button.grid(row=0, column=0)
             self.buttons.append(button)
 
-        # Label untuk menampilkan status lubang dan toko pemain AI
-        self.ai_label = tk.Label(self.master, text=f"Player 2 (AI): {self.game.board[7:13][::-1]} | {self.game.board[13]}")
-        self.ai_label.grid(row=1, columnspan=6)
+            label = tk.Label(button_frame, text=str(self.game.board[i]))
+            label.grid(row=1, column=0)
+            self.button_labels.append(label)
 
-        # Label untuk menampilkan status lubang dan toko pemain manusia
-        self.player_label = tk.Label(self.master, text=f"Player 1: {self.game.board[:6]} | {self.game.board[6]}")
-        self.player_label.grid(row=2, columnspan=6)
+        self.ai_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
+        self.ai_frame.grid(row=0, column=0, columnspan=7, padx=5, pady=5)
 
-        # Tombol untuk mereset permainan
+        self.ai_house_label = tk.Label(self.ai_frame, text=f"AI House\n{self.game.board[7:14][::-1]}", justify='left')
+        self.ai_house_label.pack()
+
+        self.player_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
+        self.player_frame.grid(row=2, column=7, columnspan=7, padx=5, pady=5)
+
+        self.player_house_label = tk.Label(self.player_frame, text=f"Player House\n{self.game.board[:7]}")
+        self.player_house_label.pack()
+
+        self.ai_store_label = tk.Label(self.master, text=f"AI Store: {self.game.board[0]}")
+        self.ai_store_label.grid(row=1, column=6)
+
+        self.player_store_label = tk.Label(self.master, text=f"Player Store: {self.game.board[7]}")
+        self.player_store_label.grid(row=1, column=7, columnspan=2)
+
         self.reset_button = tk.Button(self.master, text="Reset Game", command=self.reset_game)
-        self.reset_button.grid(row=3, columnspan=6)
-
+        self.reset_button.grid(row=4, column=0, columnspan=14)
 
     def make_player_move(self, move):
-        # Melakukan langkah pemain manusia
         self.game.make_move(move, 1)
         self.update_gui()
 
-        # Memeriksa apakah permainan sudah berakhir
         if self.game.is_game_over():
             self.show_winner()
+        else:
+            ai_move = self.game.find_best_move()
+            self.game.make_move(ai_move, 2)
+            self.update_gui()
 
-        # Melakukan langkah pemain AI setelah langkah pemain manusia
-        self.make_ai_move()
-
-
-    def make_ai_move(self):
-        # Memanggil fungsi untuk mencari dan melakukan langkah terbaik pemain AI
-        ai_move = self.game.find_best_move()
-        # Melakukan langkah AI dengan langkah terbaik yang ditemukan
-        self.game.make_move(ai_move, 2)
-        # Memperbarui tampilan GUI setelah langkah AI
-        self.update_gui()
-
-        # Memeriksa apakah permainan sudah berakhir setelah langkah pemain AI
-        if self.game.is_game_over():
-            # Menampilkan pemenang jika permainan sudah berakhir
-            self.show_winner()
-
+            if self.game.is_game_over():
+                self.show_winner()
 
     def update_gui(self):
-        # Memperbarui tampilan tombol untuk lubang-lubang pemain manusia
-        for i in range(6):
-            self.buttons[i]["text"] = str(self.game.board[i])
+        for i in range(14):
+            self.buttons[i].config(text=str(self.game.board[i]))
+            self.button_labels[i].config(text=str(self.game.board[i]))
 
-        # Memperbarui teks label untuk status lubang dan toko pemain AI
-        self.ai_label["text"] = f"Player 2 (AI): {self.game.board[7:13][::-1]} | {self.game.board[13]}"
-
-        # Memperbarui teks label untuk status lubang dan toko pemain manusia
-        self.player_label["text"] = f"Player 1: {self.game.board[:6]} | {self.game.board[6]}"
+        self.ai_house_label["text"] = f"AI House\n{self.game.board[7:14][::-1]}"
+        self.player_house_label["text"] = f"Player House\n{self.game.board[:7]}"
+        self.ai_store_label["text"] = f"AI Store: {self.game.board[0]}"
+        self.player_store_label["text"] = f"Player Store: {self.game.board[7]}"
 
     def show_winner(self):
-        # Menentukan pemenang berdasarkan jumlah biji di toko pemain
-        winner = "Player 1" if self.game.board[6] > self.game.board[13] else "Player 2 (AI)"
-        # Menampilkan popup informasi dengan pemenang permainan
+        winner = "Player 1" if self.game.board[7] > self.game.board[0] else "AI"
         messagebox.showinfo("Game Over", f"The game is over! {winner} wins!")
 
     def reset_game(self):
-        # Mereset permainan dengan membuat objek Congklak baru
         self.game = Congklak()
-        # Memperbarui tampilan GUI setelah mereset permainan
         self.update_gui()
+
+root = tk.Tk()
+app = CongklakGUI(root)
+root.mainloop()

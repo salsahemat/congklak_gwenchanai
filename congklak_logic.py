@@ -1,9 +1,9 @@
 class Congklak:
     def __init__(self):
         # Inisialisasi papan congklak
-        self.board = [7] * 14  # Setiap lubang awalnya berisi 7 biji
-        self.board[6] = 0  # Lubang untuk pemain 1
-        self.board[13] = 0  # Lubang untuk pemain 2
+        self.board = [7] * 16  # Setiap lubang awalnya berisi 7 biji
+        self.board[7] = 0  # Lubang untuk pemain 1
+        self.board[14] = 0  # Lubang untuk pemain 2
 
     def is_game_over(self):
         # Permainan berakhir jika semua lubang pemain 1 atau pemain 2 kosong
