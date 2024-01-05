@@ -53,18 +53,24 @@ class CongklakGUI:
         self.reset_button.grid(row=4, column=0, columnspan=14)
 
     def make_player_move(self, move):
+        # Player's move
         self.game.make_move(move, 1)
         self.update_gui()
 
         if self.game.is_game_over():
             self.show_winner()
         else:
-            ai_move = self.game.find_best_move()
-            self.game.make_move(ai_move, 2)
-            self.update_gui()
+            # Introduce a delay of 850 milliseconds (adjust as needed)
+            self.master.after(850, self.make_ai_move)
 
-            if self.game.is_game_over():
-                self.show_winner()
+    def make_ai_move(self):
+        # AI's move
+        ai_move = self.game.find_best_move()
+        self.game.make_move(ai_move, 2)
+        self.update_gui()
+
+        if self.game.is_game_over():
+            self.show_winner()
 
     def update_gui(self):
         for i in range(14):
@@ -82,6 +88,10 @@ class CongklakGUI:
 
     def reset_game(self):
         self.game = Congklak()
+        # Atur nilai store AI dan store pemain menjadi 0
+        self.game.board[0] = 0
+        self.game.board[7] = 0
+
         self.update_gui()
 
 root = tk.Tk()
