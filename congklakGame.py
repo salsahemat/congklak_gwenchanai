@@ -1,17 +1,19 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import *
 from congklak_logic import Congklak
+from PIL import Image, ImageTk
 
 class CongklakGUI:
     def __init__(self, master):
         self.master = master
         self.master.title("Congklak Game")
 
-        self.hole_image = tk.PhotoImage(file="asset/biji.png")
-        self.hole_image = self.hole_image.subsample(7)
+        seed = Image.open('asset/biji.png')
+        seed = seed.resize((70, 70), Image.ANTIALIAS)
+        self.hole_image = ImageTk.PhotoImage(seed)
 
-        self.store_image = tk.PhotoImage(file="asset/tempat1.png")
-        self.store_image = self.store_image.subsample(7)
+        # self.hole_image = tk.PhotoImage(file="asset/biji.png")
+        # self.hole_image = self.hole_image.subsample(4,4)
 
         self.game = Congklak()
 
@@ -21,10 +23,11 @@ class CongklakGUI:
             row = 0 if i < 7 else 2
             col = i if i < 7 else 13 - i
             button_frame = tk.Frame(self.master)
-            button_frame.grid(row=row+1, column=col)
+            # button_frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+            button_frame.grid(row=row+1, column=col, padx=10)
 
             button = tk.Button(button_frame, image=self.hole_image, command=lambda i=i: self.make_player_move(i))
-            button.grid(row=0, column=0)
+            button.grid(row=0, column=0, padx=3, pady=3)
             self.buttons.append(button)
 
             label = tk.Label(button_frame, text=str(self.game.board[i]))
@@ -94,6 +97,6 @@ class CongklakGUI:
 
         self.update_gui()
 
-root = tk.Tk()
-app = CongklakGUI(root)
-root.mainloop()
+# root = tk.Tk()
+# app = CongklakGUI(root)
+# root.mainloop()
