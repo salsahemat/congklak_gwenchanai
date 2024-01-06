@@ -9,7 +9,7 @@ class CongklakGUI:
         self.master.title("Congklak Game")
 
         seed = Image.open('asset/biji.png')
-        seed = seed.resize((70, 70), Image.ANTIALIAS)
+        seed = seed.resize((60, 60), Image.ANTIALIAS)
         self.hole_image = ImageTk.PhotoImage(seed)
 
         # self.hole_image = tk.PhotoImage(file="asset/biji.png")
@@ -19,19 +19,36 @@ class CongklakGUI:
 
         self.buttons = []
         self.button_labels = []
+
+        start_x, start_y = 210, 200  # You need to adjust these values based on your background
+        circle_distance_x = 83  # The horizontal distance between centers of circles
+        circle_distance_y = 100  # The vertical distance between top and bottom row centers
+
         for i in range(14):
+
+            if i < 7:  # Top row
+                x_position = start_x + (i * circle_distance_x)
+                y_position = start_y
+            else:  # Bottom row
+                x_position = start_x + ((13 - i) * circle_distance_x)
+                y_position = start_y + circle_distance_y
+
+
             row = 0 if i < 7 else 2
             col = i if i < 7 else 13 - i
             button_frame = tk.Frame(self.master)
-            # button_frame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
             button_frame.grid(row=row+1, column=col, padx=10)
 
-            button = tk.Button(button_frame, image=self.hole_image, command=lambda i=i: self.make_player_move(i))
-            button.grid(row=0, column=0, padx=3, pady=3)
+            button = tk.Button(self.master, width=30, height=55, image=self.hole_image, command=lambda i=i: self.make_player_move(i))
+            # button = tk.Button(button_frame, image=self.hole_image, command=lambda i=i: self.make_player_move(i))
+            # button.grid(row=0, column=0, padx=3, pady=3)
+            button.place(x=x_position, y=y_position)
             self.buttons.append(button)
-
-            label = tk.Label(button_frame, text=str(self.game.board[i]))
-            label.grid(row=1, column=0)
+            
+            label = tk.Label(self.master, text=str(self.game.board[i]))
+            # label = tk.Label(button_frame, text=str(self.game.board[i]))
+            # label.grid(row=1, column=0)
+            label.place(x=x_position, y=y_position + 70)
             self.button_labels.append(label)
 
         self.ai_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
