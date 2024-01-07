@@ -9,7 +9,7 @@ class CongklakGUI:
         self.master.title("Congklak Game")
 
         seed = Image.open('asset/biji.png')
-        seed = seed.resize((60, 60), Image.ANTIALIAS)
+        seed = seed.resize((60, 60), Image.LANCZOS)
         self.hole_image = ImageTk.PhotoImage(seed)
 
         # self.hole_image = tk.PhotoImage(file="asset/biji.png")
@@ -52,25 +52,30 @@ class CongklakGUI:
             self.button_labels.append(label)
 
         self.ai_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
-        self.ai_frame.grid(row=0, column=0, columnspan=7, padx=5, pady=5)
+        # self.ai_frame.grid(row=0, column=0, columnspan=7, padx=5, pady=5)
+        self.ai_frame.place(x=100, y=200)
 
-        self.ai_house_label = tk.Label(self.ai_frame, text=f"AI House\n{self.game.board[7:14][::-1]}", justify='left')
+        self.ai_house_label = tk.Label(self.ai_frame, text=f"AI House\n{self.game.board[7:14][::-1]}", justify='center')
         self.ai_house_label.pack()
 
         self.player_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
-        self.player_frame.grid(row=2, column=7, columnspan=7, padx=5, pady=5)
+        # self.player_frame.grid(row=2, column=7, columnspan=7, padx=5, pady=5)
+        self.player_frame.place(x=800, y=200)
 
         self.player_house_label = tk.Label(self.player_frame, text=f"Player House\n{self.game.board[:7]}")
         self.player_house_label.pack()
 
         self.ai_store_label = tk.Label(self.master, text=f"AI Store: {self.game.board[0]}")
-        self.ai_store_label.grid(row=1, column=6)
+        # self.ai_store_label.grid(row=1, column=6)
+        self.ai_store_label.place(x=100, y=300)
 
         self.player_store_label = tk.Label(self.master, text=f"Player Store: {self.game.board[7]}")
-        self.player_store_label.grid(row=1, column=7, columnspan=2)
+        # self.player_store_label.grid(row=1, column=7, columnspan=2)
+        self.player_store_label.place(x=800, y=300)
 
         self.reset_button = tk.Button(self.master, text="Reset Game", command=self.reset_game)
-        self.reset_button.grid(row=4, column=0, columnspan=14)
+        # self.reset_button.grid(row=4, column=0, columnspan=14)
+        self.reset_button.place(x=400, y=450)
 
     def make_player_move(self, move):
         # Player's move

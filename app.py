@@ -11,7 +11,7 @@ def main():
 
     # Inisialisasi background gambar dengan PIL
     image = Image.open('asset/tempat2.png')
-    image = image.resize((960, 560), Image.ANTIALIAS)
+    image = image.resize((960, 560), Image.LANCZOS)
     background_image = ImageTk.PhotoImage(image)
     # background_image = tk.PhotoImage(file='asset/tempat1.png')
     # Membuat Label yang menampilkan gambar papan congklak (background)
