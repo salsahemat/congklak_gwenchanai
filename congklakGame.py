@@ -19,23 +19,30 @@ class CongklakGUI:
 
         self.buttons = []
         self.button_labels = []
+        
+        # You need to adjust these values based on your background
+        start_x, start_y = 125, 200  
 
-        start_x, start_y = 210, 200  # You need to adjust these values based on your background
-        circle_distance_x = 83  # The horizontal distance between centers of circles
-        circle_distance_y = 100  # The vertical distance between top and bottom row centers
+        # The horizontal distance between centers of circles
+        circle_distance_x = 83  
 
-        for i in range(14):
+        # The vertical distance between top and bottom row centers
+        circle_distance_y = 100  
 
-            if i < 7:  # Top row
+        for i in range(16):
+            
+            # posisi koordinat atas baris
+            if i < 8:  
                 x_position = start_x + (i * circle_distance_x)
                 y_position = start_y
-            else:  # Bottom row
-                x_position = start_x + ((13 - i) * circle_distance_x)
+            # posisi koordinat bawah baris
+            else:  
+                x_position = start_x + 90 + ((15 - i) * circle_distance_x)
                 y_position = start_y + circle_distance_y
 
 
-            row = 0 if i < 7 else 2
-            col = i if i < 7 else 13 - i
+            row = 0 if i < 8 else 2
+            col = i if i < 8 else 15 - i
             button_frame = tk.Frame(self.master)
             button_frame.grid(row=row+1, column=col, padx=10)
 
@@ -53,25 +60,25 @@ class CongklakGUI:
 
         self.ai_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
         # self.ai_frame.grid(row=0, column=0, columnspan=7, padx=5, pady=5)
-        self.ai_frame.place(x=100, y=200)
+        self.ai_frame.place(x=100, y=150)
 
         self.ai_house_label = tk.Label(self.ai_frame, text=f"AI House\n{self.game.board[7:14][::-1]}", justify='center')
         self.ai_house_label.pack()
 
         self.player_frame = tk.Frame(self.master, borderwidth=2, relief="solid")
         # self.player_frame.grid(row=2, column=7, columnspan=7, padx=5, pady=5)
-        self.player_frame.place(x=800, y=200)
+        self.player_frame.place(x=800, y=150)
 
         self.player_house_label = tk.Label(self.player_frame, text=f"Player House\n{self.game.board[:7]}")
         self.player_house_label.pack()
 
         self.ai_store_label = tk.Label(self.master, text=f"AI Store: {self.game.board[0]}")
         # self.ai_store_label.grid(row=1, column=6)
-        self.ai_store_label.place(x=100, y=300)
+        self.ai_store_label.place(x=100, y=120)
 
         self.player_store_label = tk.Label(self.master, text=f"Player Store: {self.game.board[7]}")
         # self.player_store_label.grid(row=1, column=7, columnspan=2)
-        self.player_store_label.place(x=800, y=300)
+        self.player_store_label.place(x=800, y=120)
 
         self.reset_button = tk.Button(self.master, text="Reset Game", command=self.reset_game)
         # self.reset_button.grid(row=4, column=0, columnspan=14)
