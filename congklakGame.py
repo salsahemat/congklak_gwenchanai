@@ -12,9 +12,6 @@ class CongklakGUI:
         seed = seed.resize((60, 60), Image.LANCZOS)
         self.hole_image = ImageTk.PhotoImage(seed)
 
-        # self.hole_image = tk.PhotoImage(file="asset/biji.png")
-        # self.hole_image = self.hole_image.subsample(4,4)
-
         self.game = Congklak()
 
         self.buttons = []
@@ -106,8 +103,8 @@ class CongklakGUI:
         if self.game.is_game_over():
             self.show_winner()
         else:
-            # Introduce a delay of 850 milliseconds (adjust as needed)
-            self.master.after(850, self.make_ai_move)
+            # Introduce a delay of 990 milliseconds (adjust as needed)
+            self.master.after(990, self.make_ai_move)
 
     def make_ai_move(self):
         # AI's move
@@ -139,7 +136,3 @@ class CongklakGUI:
         self.game.board[7] = 0
 
         self.update_gui()
-
-# root = tk.Tk()
-# app = CongklakGUI(root)
-# root.mainloop()
