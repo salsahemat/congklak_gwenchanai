@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+from tkinter import messagebox
 from congklak_logic import Congklak
 from PIL import Image, ImageTk
 
@@ -38,11 +39,11 @@ class CongklakGUI:
                 y_position = start_y + distance_y
 
             # jika index i lebih dari 8, maka nilai rownya adalah 2
-            row = 0 if i < 8 else 2
+            row = 0 if i < 9 else 2
 
             
             # jika index i lebih dari 8, maka nilai rownya adalah 15 - nilai index i
-            col = i if i < 8 else 15 - i
+            col = i if i < 9 else 16 - i
 
             # frame untuk biji & label angka yang menunjukkan jumlah biji
             button_frame = tk.Frame(self.master)
@@ -68,7 +69,7 @@ class CongklakGUI:
         self.ai_frame.place(x=100, y=150)
 
         # label untuk menampilkan tulisan AI House
-        self.ai_house_label = tk.Label(self.ai_frame, text=f"AI House\n{self.game.board[7:14][::-1]}", justify='center')
+        self.ai_house_label = tk.Label(self.ai_frame, text=f"AI House\n{self.game.board[8:16][::-1]}", justify='center')
         self.ai_house_label.pack()
 
         # frame untuk menampilkan Player House
@@ -77,7 +78,7 @@ class CongklakGUI:
         self.player_frame.place(x=800, y=150)
 
         # label untuk menampilkan tulisan Player Hause
-        self.player_house_label = tk.Label(self.player_frame, text=f"Player House\n{self.game.board[:7]}")
+        self.player_house_label = tk.Label(self.player_frame, text=f"Player House\n{self.game.board[:8]}")
         self.player_house_label.pack()
 
         # label untuk menampilkan tulisan Ai Store
@@ -86,7 +87,7 @@ class CongklakGUI:
         self.ai_store_label.place(x=100, y=120)
 
         # label untuk menampilkan tulisan Player Store
-        self.player_store_label = tk.Label(self.master, text=f"Player Store: {self.game.board[7]}")
+        self.player_store_label = tk.Label(self.master, text=f"Player Store: {self.game.board[8]}")
         # self.player_store_label.grid(row=1, column=7, columnspan=2)
         self.player_store_label.place(x=800, y=120)
 
@@ -116,23 +117,29 @@ class CongklakGUI:
             self.show_winner()
 
     def update_gui(self):
-        for i in range(14):
+        for i in range(16):
             self.buttons[i].config(text=str(self.game.board[i]))
             self.button_labels[i].config(text=str(self.game.board[i]))
 
-        self.ai_house_label["text"] = f"AI House\n{self.game.board[7:14][::-1]}"
-        self.player_house_label["text"] = f"Player House\n{self.game.board[:7]}"
+        self.ai_house_label["text"] = f"AI House\n{self.game.board[8:15][::-1]}"
+        self.player_house_label["text"] = f"Player House\n{self.game.board[:8]}"
         self.ai_store_label["text"] = f"AI Store: {self.game.board[0]}"
-        self.player_store_label["text"] = f"Player Store: {self.game.board[7]}"
+        self.player_store_label["text"] = f"Player Store: {self.game.board[8]}"
 
     def show_winner(self):
-        winner = "Player 1" if self.game.board[7] > self.game.board[0] else "AI"
+        if self.game.board[8] > self.game.board[0]:
+            winner = "Player 1"
+        elif self.game.board[8] < self.game.board[0]:
+            winner = "AI"
+        else:
+            winner = "It's a draw!"
+
         messagebox.showinfo("Game Over", f"The game is over! {winner} wins!")
 
     def reset_game(self):
         self.game = Congklak()
         # Atur nilai store AI dan store pemain menjadi 0
         self.game.board[0] = 0
-        self.game.board[7] = 0
+        self.game.board[8] = 0
 
         self.update_gui()

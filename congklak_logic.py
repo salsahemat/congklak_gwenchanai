@@ -2,12 +2,12 @@ class Congklak:
     def __init__(self):
         # Inisialisasi papan congklak
         self.board = [7] * 16  # Setiap lubang awalnya berisi 7 biji
-        self.board[7] = 0  # Lubang untuk pemain 1
-        self.board[14] = 0  # Lubang untuk pemain 2
+        self.board[8] = 0  # Lubang untuk pemain 1
+        self.board[0] = 0  # Lubang untuk pemain 2
 
     def is_game_over(self):
         # Permainan berakhir jika semua lubang pemain 1 atau pemain 2 kosong
-        return all(count == 0 for count in self.board[:6]) or all(count == 0 for count in self.board[7:13])
+        return all(count == 0 for count in self.board[:8]) or all(count == 0 for count in self.board[8:15])
 
     def make_move(self, move, player):
         # Mengambil jumlah biji di lubang yang dipilih
@@ -44,16 +44,22 @@ class Congklak:
 
     def evaluate(self):
         # Skor akhir permainan adalah selisih biji antara pemain 1 dan pemain 2
-        return self.board[6] - self.board[13]
+        score = self.board[8] - self.board[15]
+        if score > 0:
+            return 1
+        elif score < 0:
+            return -1
+        else:
+            return 0
 
     def chance_moves(self, player):
         # Menentukan kumpulan lubang yang masih berisi biji untuk pemain tertentu
         if player == 1:
             # Mengembalikan indeks lubang untuk pemain 1 yang berisi biji
-            return [i for i in range(6) if self.board[i] != 0]
+            return [i for i in range(8) if self.board[i] != 0]
         elif player == 2:
             # Mengembalikan indeks lubang untuk pemain 2 yang berisi biji
-            return [i for i in range(7, 13) if self.board[i] != 0]
+            return [i for i in range(8, 15) if self.board[i] != 0]
 
 
     def find_best_move(self):
