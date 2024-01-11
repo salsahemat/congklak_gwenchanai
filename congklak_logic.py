@@ -62,59 +62,69 @@ class Congklak:
             return [i for i in range(8, 15) if self.board[i] != 0]
 
 
-    def find_best_move(self):
-        # Algoritma Minimax sederhana dengan pencarian kedalaman tetap
-        best_val = float('-inf')  # Inisialisasi nilai terbaik dengan nilai minus tak hingga
-        best_move = -1  # Inisialisasi langkah terbaik dengan nilai -1
-
-        for move in self.chance_moves(2):
-            # Membuat papan baru untuk setiap langkah dan menyalin nilai papan saat ini
-            new_board = Congklak()
-            new_board.board = self.board.copy()
-            # Melakukan langkah pada papan baru
-            new_board.make_move(move, 1)
-            # Mencari nilai Minimax pada kedalaman 3 untuk langkah saat ini
-            move_val = new_board.minimax(3, False)
-
-            # Memperbarui langkah terbaik jika nilai langkah saat ini lebih tinggi dari nilai terbaik sejauh ini
-            if move_val > best_val:
-                best_val = move_val
-                best_move = move
-
-        # Mengembalikan langkah terbaik yang ditemukan
-        return best_move
-
-    def minimax(self, depth, maximizing_player):
-        # Fungsi rekursif Minimax untuk mengevaluasi langkah terbaik pada kedalaman tertentu
+    def minimax(self, depth, maximizing_player, alpha, beta):
+        # Fungsi rekursif Minimax dengan Alpha-Beta Pruning
         if depth == 0 or self.is_game_over():
-            # Mengembalikan nilai evaluasi jika mencapai kedalaman 0 atau permainan berakhir
+            # Jika kedalaman mencapai 0 atau permainan berakhir, evaluasi posisi saat ini
             return self.evaluate()
 
         if maximizing_player:
-            # Jika giliran pemain 1 (maksimalkan), cari nilai maksimum
-            max_eval = float('-inf')  # Inisialisasi nilai maksimum dengan nilai minus tak hingga
+            max_eval = float('-inf')
+            # Inisialisasi evaluasi maksimum dengan nilai negatif tak terhingga
             for move in self.chance_moves(1):
-                # Membuat papan baru untuk setiap langkah dan menyalin nilai papan saat ini
+                # Iterasi melalui semua kemungkinan gerakan pemain 1
                 new_board = Congklak()
                 new_board.board = self.board.copy()
-                # Melakukan langkah pada papan baru
                 new_board.make_move(move, 1)
-                # Rekursif untuk mencari nilai Minimax pada kedalaman yang lebih rendah
-                eval = new_board.minimax(depth - 1, False)
-                # Memperbarui nilai maksimum jika nilai langkah saat ini lebih tinggi dari nilai maksimum sejauh ini
+                # Buat papan baru dan lakukan move pemain 1
+                eval = new_board.minimax(depth - 1, False, alpha, beta)
+                # Rekursi dengan pemanggilan fungsi minimax untuk pemain 2 (minimizing player)
                 max_eval = max(max_eval, eval)
+                # Update evaluasi maksimum
+                alpha = max(alpha, eval)
+                # Update alpha
+                if beta <= alpha:
+                    # Algoritma Alpha-Beta Pruning
+                    break
             return max_eval
         else:
-            # Jika giliran pemain 2 (minimalkan), cari nilai minimum
-            min_eval = float('inf')  # Inisialisasi nilai minimum dengan nilai tak hingga
+            min_eval = float('inf')
+            # Inisialisasi evaluasi minimum dengan nilai positif tak terhingga
             for move in self.chance_moves(2):
-                # Membuat papan baru untuk setiap langkah dan menyalin nilai papan saat ini
+                # Iterasi melalui semua kemungkinan gerakan pemain 2 (AI)
                 new_board = Congklak()
                 new_board.board = self.board.copy()
-                # Melakukan langkah pada papan baru
                 new_board.make_move(move, 2)
-                # Rekursif untuk mencari nilai Minimax pada kedalaman yang lebih rendah
-                eval = new_board.minimax(depth - 1, True)
-                # Memperbarui nilai minimum jika nilai langkah saat ini lebih rendah dari nilai minimum sejauh ini
+                # Buat papan baru dan lakukan move pemain 2
+                eval = new_board.minimax(depth - 1, True, alpha, beta)
+                # Rekursi dengan pemanggilan fungsi minimax untuk pemain 1 (maximizing player)
                 min_eval = min(min_eval, eval)
+                # Update evaluasi minimum
+                beta = min(beta, eval)
+                # Update beta
+                if beta <= alpha:
+                    # Algoritma Alpha-Beta Pruning
+                    break
             return min_eval
+
+    def find_best_move(self):
+        best_val = float('-inf')
+        # Inisialisasi evaluasi terbaik dengan nilai negatif tak terhingga
+        best_move = -1
+
+        for move in self.chance_moves(2):
+            # Iterasi melalui semua kemungkinan gerakan pemain 2 (AI)
+            new_board = Congklak()
+            new_board.board = self.board.copy()
+            new_board.make_move(move, 1)
+            # Buat papan baru dan lakukan move pemain 1
+            move_val = new_board.minimax(3, False, float('-inf'), float('inf'))
+            # Panggil fungsi minimax untuk pemain 2 dengan kedalaman 3 (sesuaikan sesuai kebutuhan)
+            if move_val > best_val:
+                # Jika evaluasi hasil move lebih baik daripada yang sudah ada
+                best_val = move_val
+                # Update evaluasi terbaik
+                best_move = move
+                # Update langkah terbaik
+        return best_move
+

@@ -117,23 +117,34 @@ class CongklakGUI:
             self.show_winner()
 
     def update_gui(self):
+        # Memperbarui tampilan GUI berdasarkan status papan permainan
         for i in range(16):
+            # Iterasi melalui semua lubang pada papan permainan
             self.buttons[i].config(text=str(self.game.board[i]))
+            # Memperbarui teks pada tombol dengan jumlah biji di lubang tersebut
             self.button_labels[i].config(text=str(self.game.board[i]))
+            # Memperbarui teks pada label yang menunjukkan jumlah biji di lubang tersebut
 
         self.ai_house_label["text"] = f"AI House\n{self.game.board[8:15][::-1]}"
+        # Memperbarui teks pada label yang menunjukkan jumlah biji di rumah AI (lubang 8 hingga 14, diurutkan dari kanan ke kiri)
         self.player_house_label["text"] = f"Player House\n{self.game.board[:8]}"
+        # Memperbarui teks pada label yang menunjukkan jumlah biji di rumah Pemain (lubang 0 hingga 7)
         self.ai_store_label["text"] = f"AI Store: {self.game.board[0]}"
+        # Memperbarui teks pada label yang menunjukkan jumlah biji di store AI (lubang 0)
         self.player_store_label["text"] = f"Player Store: {self.game.board[8]}"
+        # Memperbarui teks pada label yang menunjukkan jumlah biji di store Pemain (lubang 8)
 
     def show_winner(self):
+        # Menampilkan pemenang berdasarkan perbandingan biji di store pemain dan store AI
         if self.game.board[8] > self.game.board[0]:
             winner = "Player 1"
         elif self.game.board[8] < self.game.board[0]:
             winner = "AI"
         else:
+            # Jika biji di kedua store sama, permainan berakhir seri
             winner = "It's a draw!"
 
+        # Menampilkan dialog informasi tentang hasil permainan
         messagebox.showinfo("Game Over", f"The game is over! {winner} wins!")
 
     def reset_game(self):
