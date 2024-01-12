@@ -18,25 +18,25 @@ class Congklak:
         # Inisialisasi indeks untuk pergerakan biji
         index = move
         while stones > 0:
-            # Menggerakkan indeks ke lubang berikutnya (dengan siklus pada indeks 14)
-            index = (index + 1) % 14
+            # Menggerakkan indeks ke lubang berikutnya (dengan siklus pada indeks 16)
+            index = (index + 1) % 16
             # Menyebarkan biji ke lubang selain lubang pemain lawan
-            if not (player == 1 and index == 13) and not (player == 2 and index == 6):
+            if not (player == 1 and index == 0) and not (player == 2 and index == 8):
                 self.board[index] += 1
                 stones -= 1
 
         # Mengambil langkah khusus jika biji terakhir jatuh di lubang terakhir pemain
-        if player == 1 and 0 <= index <= 5 and self.board[index] == 1:
-            opposite_index = 12 - index
+        if player == 1 and 8 <= index <= 15 and self.board[index] == 1:
+            opposite_index = 16 - index
             # Mengambil biji di lubang terakhir dan lubang lawan
-            self.board[6] += self.board[index] + self.board[opposite_index]
+            self.board[15] += self.board[index] + self.board[opposite_index]
             # Menetapkan lubang terakhir dan lubang lawan menjadi kosong
             self.board[index] = 0
             self.board[opposite_index] = 0
-        elif player == 2 and 7 <= index <= 12 and self.board[index] == 1:
-            opposite_index = 12 - index
+        elif player == 2 and 0 <= index <= 7 and self.board[index] == 1:
+            opposite_index = 8 - index
             # Mengambil biji di lubang terakhir dan lubang lawan
-            self.board[13] += self.board[index] + self.board[opposite_index]
+            self.board[7] += self.board[index] + self.board[opposite_index]
             # Menetapkan lubang terakhir dan lubang lawan menjadi kosong
             self.board[index] = 0
             self.board[opposite_index] = 0
